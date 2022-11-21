@@ -1,8 +1,45 @@
-﻿@{
+﻿@model IEnumerable<Job>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <a asp-action="AddJob" class="btn btn-success">Tạo</a>
+    @if (Model.Count() < 1)
+    {
+        <h1>Làm ơn hãy thêm công việc.</h1>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Tên công việc</th>
+                    <th>Mô tả</th>
+                    <th>Thời gian tạo</th>
+                    <th>Thời gian sẽ xử lý công việc</th>
+                    <th>Trạng thái</th>
+                    <th>Quản lý</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.CreatedAt</td>
+                        <td>@item.ProcessingTime</td>
+                        <td>@(item.Status == 0 ? "Cần làm" : item.Status == 1 ? "Đang làm" : "Đã xong")</td>
+                        <td>
+                            <form asp-action="DeleteJob">
+                                <a asp-action="UpdateJob" asp-route-id="@item.Id" class="btn btn-primary">Sửa</a>
+                                <button type="submit" class="btn btn-danger" onclick="return confirm("Bạn muốn xoá công việc @item.Name?")">Xoá</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
