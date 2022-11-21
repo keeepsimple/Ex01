@@ -30,7 +30,12 @@ namespace Ex01.Data.Repositories
 
         public Job JobGetById(int id)
         {
-            return _context.Jobs.Find(id);
+            var job = _context.Jobs.FirstOrDefault(x => x.Id == id);
+            if(job == null)
+            {
+                throw new ArgumentNullException(nameof(job));
+            }
+            return job;
         }
 
         public int Update(Job job)

@@ -16,9 +16,18 @@ namespace Ex01.Controllers
             _jobRepository = jobRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
+            ViewData["CreatedAtParm"] = String.IsNullOrEmpty(sortOrder) ? "create_asc" : "";
+            ViewData["ProcessingTimeParm"] = sortOrder == "ProcessingTime" ? "processingTime_desc" : "ProcessingTime";
             var list = _jobRepository.GetAll();
+            switch (sortOrder)
+            {
+                case "create_asc": list = list.OrderBy(x=>x.CreatedAt); break;
+                case "ProcessingTime": list = list.OrderBy(x=>x.ProcessingTime); break;
+                case "processingTime_desc": list = list.OrderByDescending(x=>x.ProcessingTime); break;
+                default: list = list.OrderByDescending(x => x.CreatedAt);break;
+            }
             return View(list);
         }
 

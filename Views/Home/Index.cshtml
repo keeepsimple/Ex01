@@ -16,8 +16,8 @@
                 <tr>
                     <th>Tên công việc</th>
                     <th>Mô tả</th>
-                    <th>Thời gian tạo</th>
-                    <th>Thời gian sẽ xử lý công việc</th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["CreatedAtParm"]" style="text-decoration:none">Thời gian tạo</a></th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["ProcessingTimeParm"]" style="text-decoration:none">Thời gian sẽ xử lý công việc</a></th>
                     <th>Trạng thái</th>
                     <th>Quản lý</th>
                 </tr>
@@ -32,9 +32,9 @@
                         <td>@item.ProcessingTime</td>
                         <td>@(item.Status == 0 ? "Cần làm" : item.Status == 1 ? "Đang làm" : "Đã xong")</td>
                         <td>
-                            <form asp-action="DeleteJob">
+                            <form asp-action="DeleteJob" asp-route-id="@item.Id">
                                 <a asp-action="UpdateJob" asp-route-id="@item.Id" class="btn btn-primary">Sửa</a>
-                                <button type="submit" class="btn btn-danger" onclick="return confirm("Bạn muốn xoá công việc @item.Name?")">Xoá</button>
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn muốn xoá công việc @item.Name?')">Xoá</button>
                             </form>
                         </td>
                     </tr>
