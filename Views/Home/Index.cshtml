@@ -1,13 +1,22 @@
-﻿@model IEnumerable<Job>
+﻿@model Paginated<Job>
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
+<div>
     <a asp-action="AddJob" class="btn btn-success">Tạo</a>
+    <form asp-action="Index" method="get">
+        <div class="input-group mb-3 mt-3">
+            <input type="text" class="form-control" placeholder="Tìm kiếm..." name="searchString" value="@ViewData["CurFilter"]" aria-describedby="basic-addon1">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a asp-action="Index" class="btn btn-light">Xoá</a>
+        </div>
+    </form>
+</div>
+<div class="text-center">
+
     @if (Model.Count() < 1)
     {
-        <h1>Làm ơn hãy thêm công việc.</h1>
+        <h1>Không tìm thấy công việc.</h1>
     }
     else
     {
@@ -16,8 +25,8 @@
                 <tr>
                     <th>Tên công việc</th>
                     <th>Mô tả</th>
-                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["CreatedAtParm"]" style="text-decoration:none">Thời gian tạo</a></th>
-                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["ProcessingTimeParm"]" style="text-decoration:none">Thời gian sẽ xử lý công việc</a></th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["CreatedAtParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" style="text-decoration:none">Thời gian tạo</a></th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@ViewData["ProcessingTimeParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" style="text-decoration:none">Thời gian sẽ xử lý công việc</a></th>
                     <th>Trạng thái</th>
                     <th>Quản lý</th>
                 </tr>
@@ -30,7 +39,7 @@
                         <td>@item.Description</td>
                         <td>@item.CreatedAt</td>
                         <td>@item.ProcessingTime</td>
-                        <td>@(item.Status == 0 ? "Cần làm" : item.Status == 1 ? "Đang làm" : "Đã xong")</td>
+                        <td>@item.Status</td>
                         <td>
                             <form asp-action="DeleteJob" asp-route-id="@item.Id">
                                 <a asp-action="UpdateJob" asp-route-id="@item.Id" class="btn btn-primary">Sửa</a>
@@ -43,3 +52,38 @@
         </table>
     }
 </div>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var pageRange = 3;
+}
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled">
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNum="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]" class="page-link">Previous</a>
+        </li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i >= Model.PageIndex - pageRange && i <= Model.PageIndex + pageRange)
+            {
+                <li class="page-item @(i==Model.PageIndex ? "active" : "")">
+                    <a class="page-link" 
+                    asp-action="Index" 
+                    asp-route-pageNum="@i"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                    asp-route-currentFilter="@ViewData["CurrentFilter"]">@i</a>
+                </li>
+            }
+        }
+
+        <li class="page-item @nextDisabled">
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNum="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>

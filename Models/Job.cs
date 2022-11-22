@@ -15,6 +15,6 @@ namespace Ex01.Models
 
         public DateTime? ProcessingTime { get; set;}
 
-        public int Status { get; set; }
+        public string Status { get; set; }
     }
 }

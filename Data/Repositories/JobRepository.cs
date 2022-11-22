@@ -1,4 +1,7 @@
-﻿using Ex01.Models;
+﻿using Ex01.Helper;
+using Ex01.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Ex01.Data.Repositories
 {
@@ -25,7 +28,17 @@ namespace Ex01.Data.Repositories
 
         public IEnumerable<Job> GetAll()
         {
-            return _context.Jobs.ToList();
+            return _context.Jobs;
+        }
+
+        public async Task<Paginated<Job>> GetAsync(Expression<Func<Job, bool>> filter = null, 
+            Func<IQueryable<Job>, IOrderedQueryable<Job>> orderBy = null, int pageIndex = 1, int pageSize = 10)
+        {
+            IQueryable<Job> query = _context.Jobs;
+            if(filter != null) query = query.Where(filter);
+            if(orderBy != null) query = orderBy(query);
+
+            return await Paginated<Job>.CreateAsync(query.AsNoTracking(), pageIndex, pageSize);
         }
 
         public Job JobGetById(int id)

@@ -22,6 +22,7 @@
                     <label for="floatingInput">Thời gian sẽ xử lý công việc</label>
                     <span asp-validation-for="ProcessingTime" class="text-danger"></span>
                 </div>
+                <input type="hidden" name="Status" value="Cần làm" />
                 <input type="submit"class="btn btn-success mt-3" value="Tạo"/>
                 <a asp-action="Index" class="btn btn-light mt-3">Trở lại</a>
             </form>

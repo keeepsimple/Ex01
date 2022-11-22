@@ -25,15 +25,15 @@
                 </div>
                 <div class="form-floating mt-3">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Status" @(Model.Status == 0 ? "checked": "unchecked") id="Status" value="0">
+                        <input class="form-check-input" type="radio" name="Status" @(Model.Status.Equals("Cần làm") ? "checked" : "unchecked") id="Status" value="Cần làm">
                         <label class="form-check-label" for="Status">Cần làm</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Status" @(Model.Status == 1 ? "checked" : "unchecked") id="Status" value="1">
+                        <input class="form-check-input" type="radio" name="Status" @(Model.Status.Equals("Đang làm") ? "checked" : "unchecked") id="Status" value="Đang làm">
                         <label class="form-check-label" for="Status">Đang làm</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="Status" @(Model.Status == 2 ? "checked" : "unchecked") id="Status" value="2">
+                        <input class="form-check-input" type="radio" name="Status" @(Model.Status.Equals("Đã làm") ? "checked" : "unchecked") id="Status" value="Đã làm">
                         <label class="form-check-label" for="Status">Đã làm</label>
                     </div>
                 </div>
